@@ -12,4 +12,6 @@ uint8_t pol_reader(int);
 uint8_t** combinator(uint8_t*, uint8_t*, int);
 void write_to_file(char*, uint8_t*, uint8_t*);
 
+void print_binary(int, int);
+
 #endif // LUT_GEN_H__
