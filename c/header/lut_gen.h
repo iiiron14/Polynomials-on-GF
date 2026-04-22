@@ -6,9 +6,10 @@
 #include <stdlib.h>
 #include <math.h>
 
-uint8_t* gen_mult_form(int);
-uint8_t* gen_add_form(int);
-uint8_t pol_reader(int);
+int* power_gen(int);
+int* add_gen(int*, int, int);
+int pol_reader(int);
+void pol_writer(int, int);
 uint8_t** combinator(uint8_t*, uint8_t*, int);
 void write_to_file(char*, uint8_t*, uint8_t*);
 
