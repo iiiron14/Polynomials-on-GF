@@ -12,8 +12,8 @@ int main(void)
 	scanf("%d", &m);
 
 	mult_mat = gen_mult_form(m);
-	add_mat = gen_add_form(m);
-	write_to_file(filename, add_mat, mult_mat);
+	for(int i=0; i<((int) pow(2,m)); i++)
+		printf("\n%d", mult_mat[i]);
 
 	return 0;
 }
