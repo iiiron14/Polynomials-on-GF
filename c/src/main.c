@@ -36,5 +36,15 @@ int main(void)
 		printf("\n");
 		print_binary(add_mat[i], m);
 	}
+
+	// TEST PRIMITIVE POLYNOMIALS
+	char primitive = is_primitive(pol, m) ? 'y' : 'n';
+	printf("\n Primitiveness: %c", primitive);
+
+	// TEST WRITE TO FILE
+	write_to_file(filename, add_mat, mult_mat, m);
+	
+	free(mult_mat);
+	free(add_mat);
 	return 0;
 }

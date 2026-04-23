@@ -38,6 +38,8 @@ int pol_division(int pol, int dividend, int m)
 int primitive_exp(int alpha, int q)
 {
 	int exponent=q-1;
+	if(alpha==0)
+		return 0;
 	while(((alpha >> exponent) & 1U) != 1U)
 	{
 		exponent--;
@@ -58,6 +60,10 @@ int pol_reader(int m)
 		do{
 			printf("\nCoefficiente x^%d: ", i);
 			scanf("%d", &pol_coeff);
+			if((i==m) && (pol_coeff==0)){
+				printf("\nERRORE: il coefficiente di grado m deve essere non nullo");
+				pol_coeff = -1;
+			}
 		} while((pol_coeff != 0) && (pol_coeff != 1));
 		pol |= (pol_coeff << i);
 	}
@@ -78,9 +84,15 @@ void pol_writer(int pol, int len)
 	}
 }
 
-void write_to_file(char* filename, uint8_t* add_mat, uint8_t* mult_mat)
+void write_to_file(char* filename, int* add_mat, int* mult_mat, int m)
 {
-	return;
+	FILE* f;
+	int q = (int) pow(2,m);
+	if((f = fopen(filename, "w")) == NULL)
+		exit(1);
+	for(int i=0; i<q; i++)
+		fprintf(f, "%d\t%d\n", mult_mat[i], add_mat[i]);
+	fclose(f);
 }
 
 // Prints n in binary format of size length. Goes from MSb to LSb
@@ -90,9 +102,22 @@ void print_binary(int n, int size)
 		printf("%d", n>>i & 1U);
 }
 
-/*
-uint8_t is_primitive(pol)
-{
 
+uint8_t is_primitive(int pol, int m)
+{
+	int q = (int) pow(2,m);
+	uint8_t is_max_grade = 0;
+	int dividend, rem;
+
+	for(int i=q-1; i>0; i--)
+	{
+		dividend = 1;
+		dividend |= (1U<<i);
+		rem = pol_division(pol, dividend, m);
+		if((i == q-1) && (rem==0))
+			is_max_grade = 1;
+		else if(rem == 0)
+			is_max_grade = 0;
+	}
+	return is_max_grade;
 }
-*/
