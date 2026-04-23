@@ -1,6 +1,7 @@
 #include "..\header\lut_gen.h"
 
 int primitive_exp(int alpha, int q);
+int pol_division(int pol, int dividend, int m);
 
 int* power_gen(int q)
 {
@@ -15,24 +16,23 @@ int* add_gen(int* power_mat, int m, int pol)
 {
 	int q = (int) pow(2,m);
 	int *add_mat = (int *)malloc(sizeof(int)*q);
-	int rem, exponent, rem_grade;
 	add_mat[0] = 0;
 	for(int i=1; i<q; i++)
-	{
-		exponent = primitive_exp(power_mat[i], q);
-		rem = power_mat[i];
-		// printf("\n\nTEST: exponent=%d", exponent);
-		do
-		{
-			rem_grade = exponent - m;
-			rem = rem ^ (pol << (rem_grade));
-			exponent = primitive_exp(rem, q);
-			// printf("\nrem_grade: %d, exponent: %d, rem: ", rem_grade, exponent);
-			// print_binary(rem, q-1);
-		}while(exponent >= m);
-		add_mat[i] = rem;
-	}
+		add_mat[i] = pol_division(pol, power_mat[i], m);
 	return add_mat;
+}
+
+int pol_division(int pol, int dividend, int m)
+{
+	int q = (int) pow(2,m);
+	int rem_grade = primitive_exp(dividend, q);
+	int rem = dividend;
+	while(rem_grade >= m)
+	{
+		rem ^= (pol << (rem_grade - m));
+		rem_grade = primitive_exp(rem, q);
+	}
+	return rem;
 }
 
 int primitive_exp(int alpha, int q)
@@ -83,8 +83,16 @@ void write_to_file(char* filename, uint8_t* add_mat, uint8_t* mult_mat)
 	return;
 }
 
+// Prints n in binary format of size length. Goes from MSb to LSb
 void print_binary(int n, int size)
 {
 	for(int i=size-1; i>=0; i--)
 		printf("%d", n>>i & 1U);
 }
+
+/*
+uint8_t is_primitive(pol)
+{
+
+}
+*/
